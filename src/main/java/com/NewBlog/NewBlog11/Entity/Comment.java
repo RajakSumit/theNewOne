@@ -5,31 +5,22 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
+@Table(name = "Comments")
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name ="Employees")
-@Entity
-public class Post {
-
-
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    private String text;
+
     private String name;
 
-    private String department;
-
-
-    // Define One-to-Many relationship with Comment
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-    private List<Comment> comments;
-
-
-
-
-
+    // Define Many-to-One relationship with Post
+    @ManyToOne
+    @JoinColumn(name = "post_id") // Define the foreign key column in the Comment table
+    private Post post;
 }
