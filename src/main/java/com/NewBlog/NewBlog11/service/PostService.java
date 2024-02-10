@@ -13,4 +13,8 @@ public interface PostService {
 
 
     List<PostDto> getAllPost(int pageNo, int pageSize, String sortBY, String sortDir);
+
+
+
+    void deletePost(long id);
 }

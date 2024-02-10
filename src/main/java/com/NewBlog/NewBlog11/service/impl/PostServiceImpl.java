@@ -2,9 +2,11 @@ package com.NewBlog.NewBlog11.service.impl;
 
 import com.NewBlog.NewBlog11.Entity.Post;
 import com.NewBlog.NewBlog11.exception.ResourceNotFoundException;
+import com.NewBlog.NewBlog11.payload.CommentDto;
 import com.NewBlog.NewBlog11.payload.PostDto;
 import com.NewBlog.NewBlog11.repository.PostRepository;
 import com.NewBlog.NewBlog11.service.PostService;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,8 +21,13 @@ public class PostServiceImpl implements PostService {
 
     private PostRepository postRepository;
 
-    public PostServiceImpl(PostRepository postRepository) {
+    private ModelMapper modelMapper;
+
+
+
+    public PostServiceImpl(PostRepository postRepository,ModelMapper modelMapper) {
         this.postRepository = postRepository;
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -72,19 +79,32 @@ public class PostServiceImpl implements PostService {
         return dtos;
     }
 
-     PostDto mapToDto(Post post) {
-         PostDto dto = new PostDto();
-         dto.setId(post.getId());
-         dto.setDepartment(post.getDepartment());
-         dto.setName(post.getName());
-         return dto;
+    @Override
+    public void deletePost(long id) {
+        postRepository.deleteById(id);
+    }
+
+    PostDto mapToDto(Post post) {
+
+        PostDto dto = modelMapper.map(post, PostDto.class);
+        return dto;
+
+
+//         PostDto dto = new PostDto();
+//         dto.setId(post.getId());
+//         dto.setDepartment(post.getDepartment());
+//         dto.setName(post.getName());
+
     }
 
      Post mapToEntity(PostDto postDto){
-         Post post = new Post();
-         post.setDepartment(postDto.getDepartment());
-         post.setName(postDto.getName());
+         Post post = modelMapper.map(postDto, Post.class);
          return post;
+
+//         Post post = new Post();
+//         post.setDepartment(postDto.getDepartment());
+//         post.setName(postDto.getName());
+//         return post;
 
 
      }

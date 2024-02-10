@@ -7,6 +7,7 @@ import com.NewBlog.NewBlog11.service.PostService;
 import com.NewBlog.NewBlog11.service.impl.PostServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +22,11 @@ public class PostController {
     public PostController(PostService postService) {
         this.postService = postService;
     }
+
+
+
         //http://localhost:8080/api/posts
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<PostDto> createPost(@RequestBody PostDto postDto){
         PostDto dto = postService.createPost(postDto);
@@ -52,5 +57,17 @@ public class PostController {
         return postDtos;
 
     }
+
+//    http://localhost:8080/api/posts/1
+    @DeleteMapping("/{Id}")
+    public ResponseEntity<String> deletePost(@PathVariable long Id){
+        postService.deletePost(Id);
+        return new ResponseEntity<>("Post is Deleted",HttpStatus.OK);
+
+
+    }
+
+
+
 
 }
